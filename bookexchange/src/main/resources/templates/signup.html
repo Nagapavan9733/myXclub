@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Metrolinx Book Exchange</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="d-flex align-items-center min-vh-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6">
+                <!-- Signup Card -->
+                <div class="card border-0 shadow-lg" style="border-radius: 20px; overflow: hidden;">
+                    <!-- Card Header with Gradient -->
+                    <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #10b981, #059669); border: none;">
+                        <div class="text-white">
+                            <i class="fas fa-user-plus fa-3x mb-3"></i>
+                            <h2 class="h3 mb-2 fw-bold">Create Your Account</h2>
+                            <p class="mb-0 opacity-75">Complete your registration</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Body -->
+                    <div class="card-body p-5">
+                        <!-- Flash Messages -->
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show border-0 shadow-sm">
+                            <span th:text="${error}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <div th:if="${success}" class="alert alert-success alert-dismissible fade show border-0 shadow-sm">
+                            <span th:text="${success}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <!-- Signup Form -->
+                        <form th:action="@{/signup}" method="post" class="needs-validation" novalidate>
+                            <!-- Email Field (Read-only) -->
+                            <div class="mb-4">
+                                <label for="email" class="form-label fw-semibold">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-envelope text-success"></i>
+                                    </span>
+                                    <input type="email" class="form-control border-start-0 bg-light" id="email" name="email" 
+                                           th:value="${email}" readonly
+                                           style="border-radius: 0 10px 10px 0;">
+                                </div>
+                                <div class="form-text text-success">
+                                    <i class="fas fa-check-circle me-1"></i> Authorized company email
+                                </div>
+                            </div>
+                            
+                            <!-- Full Name Field -->
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-semibold">Full Name *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-user text-primary"></i>
+                                    </span>
+                                    <input type="text" class="form-control border-start-0" id="name" name="name" 
+                                           placeholder="Enter your full name" required
+                                           style="border-radius: 0 10px 10px 0;">
+                                </div>
+                                <div class="invalid-feedback">Please enter your full name.</div>
+                            </div>
+                            
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-semibold">Password *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-lock text-primary"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0" id="password" name="password" 
+                                           placeholder="Create a password" minlength="6" required
+                                           style="border-radius: 0 10px 10px 0;">
+                                </div>
+                                <div class="form-text">Password must be at least 6 characters long</div>
+                                <div class="invalid-feedback">Please enter a valid password (min 6 characters).</div>
+                            </div>
+                            
+                            <!-- Confirm Password Field -->
+                            <div class="mb-4">
+                                <label for="confirmPassword" class="form-label fw-semibold">Confirm Password *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="fas fa-lock text-primary"></i>
+                                    </span>
+                                    <input type="password" class="form-control border-start-0" id="confirmPassword" name="confirmPassword" 
+                                           placeholder="Confirm your password" required
+                                           style="border-radius: 0 10px 10px 0;">
+                                </div>
+                                <div class="invalid-feedback">Please confirm your password.</div>
+                            </div>
+                            
+                            <!-- Password Match Validation -->
+                            <div id="passwordMatch" class="alert alert-warning border-0 d-none">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <span>Passwords do not match</span>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-success btn-lg w-100 py-3 mb-3 fw-semibold shadow-sm">
+                                <i class="fas fa-user-plus me-2"></i> Create Account
+                            </button>
+                        </form>
+
+                        <!-- Footer Links -->
+                        <div class="text-center pt-3 border-top">
+                            <small class="text-muted">
+                                Already have an account? 
+                                <a th:href="@{/login}" class="text-decoration-none fw-semibold">Sign in here</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="text-center mt-4">
+                    <p class="text-white mb-0">&copy; 2025 Metrolinx Book Exchange System. Enterprise Edition</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Password match validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const passwordMatch = document.getElementById('passwordMatch');
+            const form = document.querySelector('form');
+            
+            function validatePasswordMatch() {
+                if (password.value && confirmPassword.value && password.value !== confirmPassword.value) {
+                    passwordMatch.classList.remove('d-none');
+                    return false;
+                } else {
+                    passwordMatch.classList.add('d-none');
+                    return true;
+                }
+            }
+            
+            password.addEventListener('input', validatePasswordMatch);
+            confirmPassword.addEventListener('input', validatePasswordMatch);
+            
+            // Bootstrap form validation
+            (function () {
+                'use strict'
+                var forms = document.querySelectorAll('.needs-validation')
+                Array.prototype.slice.call(forms).forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity() || !validatePasswordMatch()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+        });
+    </script>
+</body>
+</html>

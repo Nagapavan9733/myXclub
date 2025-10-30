@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exchange Details - Metrolinx Book Exchange</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+    <!-- Enhanced Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/dashboard}">
+                <i class="fas fa-book-exchange"></i> Metrolinx Book Exchange
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/dashboard}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/books}">
+                            <i class="fas fa-book"></i> Books
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/members}">
+                            <i class="fas fa-users"></i> Members
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/exchanges}">
+                            <i class="fas fa-exchange-alt"></i> Exchanges
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-link nav-link text-light p-0 border-0">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="page-title">Exchange Details</h1>
+                    <p class="page-subtitle" th:text="'Exchange #' + ${exchange.id}">Exchange details</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a th:href="@{/exchanges}" class="btn btn-light btn-lg">
+                        <i class="fas fa-arrow-left"></i> Back to Exchanges
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Exchange Details -->
+        <div th:if="${exchange}" class="row">
+            <div class="col-lg-8">
+                <!-- Book Information -->
+                <div class="modern-form mb-4">
+                    <div class="form-section">
+                        <h4 class="mb-4"><i class="fas fa-book text-primary me-2"></i>Book Information</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">Book Title</label>
+                                    <p class="fs-5" th:text="${exchange.book.title}">Book Title</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">Author</label>
+                                    <p class="fs-5 text-muted" th:text="${exchange.book.author}">Author</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">Genre</label>
+                                    <div>
+                                        <span th:if="${exchange.book.genre}" class="badge bg-info" th:text="${exchange.book.genre}">Genre</span>
+                                        <span th:unless="${exchange.book.genre}" class="text-muted">Not specified</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label fw-semibold">Book Owner</label>
+                                    <p class="fs-5">
+                                        <i class="fas fa-user-tie text-success me-2"></i>
+                                        <span th:text="${exchange.lender.name}">Lender</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exchange Timeline -->
+                <div class="modern-form">
+                    <div class="form-section">
+                        <h4 class="mb-4"><i class="fas fa-history text-primary me-2"></i>Exchange Timeline</h4>
+                        
+                        <div class="timeline">
+                            <div class="d-flex mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-clock fa-2x text-warning"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-4">
+                                    <h6 class="mb-1 fw-semibold">Request Submitted</h6>
+                                    <p class="text-muted mb-0" th:text="${#temporals.format(exchange.requestDate, 'yyyy-MM-dd HH:mm')}">Date</p>
+                                </div>
+                            </div>
+                            
+                            <div th:if="${exchange.approvalDate}" class="d-flex mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-check fa-2x text-success"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-4">
+                                    <h6 class="mb-1 fw-semibold">Request Approved</h6>
+                                    <p class="text-muted mb-0" th:text="${#temporals.format(exchange.approvalDate, 'yyyy-MM-dd HH:mm')}">Date</p>
+                                </div>
+                            </div>
+                            
+                            <div th:if="${exchange.dueDate}" class="d-flex mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-calendar fa-2x text-info"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-4">
+                                    <h6 class="mb-1 fw-semibold">Due Date</h6>
+                                    <p class="text-muted mb-0" th:text="${#temporals.format(exchange.dueDate, 'yyyy-MM-dd')}">Date</p>
+                                </div>
+                            </div>
+                            
+                            <div th:if="${exchange.returnDate}" class="d-flex mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-undo fa-2x text-secondary"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-4">
+                                    <h6 class="mb-1 fw-semibold">Book Returned</h6>
+                                    <p class="text-muted mb-0" th:text="${#temporals.format(exchange.returnDate, 'yyyy-MM-dd HH:mm')}">Date</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="modern-form">
+                    <div class="form-section">
+                        <h4 class="mb-4"><i class="fas fa-info-circle text-primary me-2"></i>Exchange Status</h4>
+                        
+                        <div class="mb-4">
+                            <span th:switch="${exchange.status}" class="status-badge fs-6">
+                                <span th:case="REQUESTED" class="status-badge status-pending fs-5">Requested</span>
+                                <span th:case="APPROVED" class="status-badge status-available fs-5">Approved</span>
+                                <span th:case="BORROWED" class="status-badge status-borrowed fs-5">Borrowed</span>
+                                <span th:case="RETURNED" class="status-badge status-unavailable fs-5">Returned</span>
+                                <span th:case="REJECTED" class="status-badge status-unavailable fs-5">Rejected</span>
+                                <span th:case="*" class="status-badge status-unavailable fs-5" th:text="${exchange.status}">Status</span>
+                            </span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Borrower</label>
+                            <p class="fs-5">
+                                <i class="fas fa-user text-primary me-2"></i>
+                                <span th:text="${exchange.borrower.name}">Borrower Name</span>
+                            </p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Lender</label>
+                            <p class="fs-5">
+                                <i class="fas fa-user-tie text-success me-2"></i>
+                                <span th:text="${exchange.lender.name}">Lender Name</span>
+                            </p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-grid gap-3 mt-4">
+                            <div th:switch="${exchange.status}">
+                                <!-- Pending Request Actions -->
+                                <div th:case="REQUESTED">
+                                    <form th:action="@{/exchanges/{id}/approve(id=${exchange.id})}" method="post" class="d-inline w-100">
+                                        <button type="submit" class="btn btn-success btn-lg w-100 mb-2">
+                                            <i class="fas fa-check"></i> Approve Request
+                                        </button>
+                                    </form>
+                                    <form th:action="@{/exchanges/{id}/reject(id=${exchange.id})}" method="post" class="d-inline w-100">
+                                        <button type="submit" class="btn btn-danger btn-lg w-100" 
+                                                onclick="return confirm('Are you sure you want to reject this request?')">
+                                            <i class="fas fa-times"></i> Reject Request
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Approved/Borrowed Actions -->
+                                <div th:case="APPROVED, BORROWED">
+                                    <form th:action="@{/exchanges/{id}/return(id=${exchange.id})}" method="post" class="d-inline w-100">
+                                        <button type="submit" class="btn btn-success btn-lg w-100" 
+                                                onclick="return confirm('Mark this book as returned?')">
+                                            <i class="fas fa-undo"></i> Mark as Returned
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Returned - No Actions -->
+                                <div th:case="RETURNED">
+                                    <button class="btn btn-outline-secondary btn-lg w-100" disabled>
+                                        <i class="fas fa-check"></i> Exchange Completed
+                                    </button>
+                                </div>
+                                
+                                <!-- Rejected - No Actions -->
+                                <div th:case="REJECTED">
+                                    <button class="btn btn-outline-secondary btn-lg w-100" disabled>
+                                        <i class="fas fa-times"></i> Request Rejected
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exchange not found message -->
+        <div th:unless="${exchange}" class="modern-form">
+            <div class="text-center py-5">
+                <i class="fas fa-exchange-alt fa-4x text-muted mb-3"></i>
+                <h4>Exchange Not Found</h4>
+                <p class="text-muted">The requested exchange could not be found.</p>
+                <a th:href="@{/exchanges}" class="btn btn-primary">Back to Exchanges</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-5 py-4">
+        <div class="container text-center">
+            <p class="mb-0 text-white">&copy; 2025 Metrolinx Book Exchange System. Enterprise Edition</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
