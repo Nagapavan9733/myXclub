@@ -33,6 +33,11 @@ public class AuthController {
     public String showEmailValidationPage() {
         return "email-validation";
     }
+    
+    @GetMapping("/home")
+    public String showHomePage() {
+        return "home";
+    }
 
     @PostMapping("/validate-email")
     public String validateEmail(@RequestParam String email, 

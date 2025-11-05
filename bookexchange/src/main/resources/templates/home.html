@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetroLinx - Enterprise Team Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0055A4;
+            --primary-dark: #003366;
+            --accent-green: #00A651;
+            --accent-orange: #FF6B35;
+            --neutral-light: #F8F9FA;
+            --neutral-dark: #2D3748;
+            --text-primary: #1A202C;
+            --text-secondary: #718096;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Enhanced Navigation */
+        .enterprise-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .enterprise-navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-brand i {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link-enterprise {
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link-enterprise:hover {
+            color: var(--primary-blue) !important;
+            background: rgba(0, 85, 164, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .nav-link-enterprise.active {
+            color: var(--primary-blue) !important;
+            background: rgba(0, 85, 164, 0.08);
+        }
+
+        .nav-link-enterprise.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background: var(--primary-blue);
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
+        .enterprise-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 8rem 0 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enterprise-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.05"><polygon fill="white" points="0,1000 1000,0 1000,1000"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .hero-actions .btn {
+            border-radius: 12px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            margin: 0 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-enterprise {
+            background: linear-gradient(135deg, var(--accent-green), #008C45);
+            border: none;
+            box-shadow: 0 8px 25px rgba(0, 166, 81, 0.3);
+        }
+
+        .btn-primary-enterprise:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 166, 81, 0.4);
+        }
+
+        .btn-outline-light-enterprise {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-outline-light-enterprise:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-card-enterprise {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card-enterprise::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-green));
+        }
+
+        .feature-card-enterprise:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            border-color: rgba(0, 85, 164, 0.2);
+        }
+
+        .feature-icon-enterprise {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            font-size: 1.75rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+        }
+
+        .feature-title-enterprise {
+            font-size: 1.375rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature-description-enterprise {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ACHIEVEMENTS SECTION - ADD THIS NEW STYLE BLOCK */
+        .achievements-section {
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-carousel {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .achievement-slide {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transform: translateX(100px);
+        }
+
+        .achievement-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            position: relative;
+        }
+
+        .achievement-content {
+            display: flex;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .achievement-image {
+            flex: 1;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .achievement-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0, 85, 164, 0.1), rgba(0, 166, 81, 0.1));
+        }
+
+        .achievement-text {
+            flex: 1;
+            padding: 3rem;
+        }
+
+        .achievement-badge {
+            background: linear-gradient(135deg, var(--accent-orange), #E55A00);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .achievement-description {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .achievement-team {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .team-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .team-info h6 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .team-info p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .carousel-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-blue);
+            background: white;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(0, 85, 164, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" opacity="0.03"><circle fill="white" cx="200" cy="200" r="100"/><circle fill="white" cx="800" cy="300" r="150"/><circle fill="white" cx="400" cy="700" r="120"/></svg>');
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .enterprise-footer {
+            background: var(--neutral-dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .feature-card-enterprise {
+                padding: 2rem 1.5rem;
+            }
+
+            .achievement-content {
+                flex-direction: column;
+                min-height: auto;
+            }
+            
+            .achievement-image {
+                height: 300px;
+                width: 100%;
+            }
+            
+            .achievement-text {
+                padding: 2rem;
+            }
+            
+            .achievement-title {
+                font-size: 1.5rem;
+            }
+            
+            .achievement-description {
+                font-size: 1rem;
+            }
+        }
+		
+		/* Events Section */
+		       .events-section {
+		           background: white;
+		           padding: 6rem 0;
+		           position: relative;
+		       }
+
+		       .events-grid {
+		           display: grid;
+		           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		           gap: 2rem;
+		           margin-top: 3rem;
+		       }
+
+		       .event-card {
+		           background: white;
+		           border-radius: 20px;
+		           overflow: hidden;
+		           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+		           transition: all 0.4s ease;
+		           border: 1px solid rgba(0, 0, 0, 0.05);
+		           position: relative;
+		       }
+
+		       .event-card:hover {
+		           transform: translateY(-8px);
+		           box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+		       }
+
+		       .event-card.featured {
+		           border: 2px solid var(--accent-orange);
+		           position: relative;
+		       }
+
+		       .event-card.featured::before {
+		           content: 'Featured Event';
+		           position: absolute;
+		           top: 1rem;
+		           right: 1rem;
+		           background: var(--accent-orange);
+		           color: white;
+		           padding: 0.5rem 1rem;
+		           border-radius: 20px;
+		           font-size: 0.75rem;
+		           font-weight: 600;
+		           z-index: 2;
+		       }
+
+		       .event-image {
+		           height: 200px;
+		           background-size: cover;
+		           background-position: center;
+		           background-repeat: no-repeat;
+		           position: relative;
+		       }
+
+		       .event-image::after {
+		           content: '';
+		           position: absolute;
+		           top: 0;
+		           left: 0;
+		           right: 0;
+		           bottom: 0;
+		           background: linear-gradient(135deg, rgba(0, 85, 164, 0.1), rgba(0, 166, 81, 0.1));
+		       }
+
+		       .event-date {
+		           position: absolute;
+		           top: 1.5rem;
+		           left: 1.5rem;
+		           background: white;
+		           border-radius: 12px;
+		           padding: 0.75rem;
+		           text-align: center;
+		           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+		           z-index: 1;
+		       }
+
+		       .event-day {
+		           font-size: 1.5rem;
+		           font-weight: 700;
+		           color: var(--primary-blue);
+		           line-height: 1;
+		       }
+
+		       .event-month {
+		           font-size: 0.875rem;
+		           font-weight: 600;
+		           color: var(--text-secondary);
+		           text-transform: uppercase;
+		       }
+
+		       .event-content {
+		           padding: 2rem;
+		       }
+
+		       .event-category {
+		           display: inline-block;
+		           background: rgba(0, 85, 164, 0.1);
+		           color: var(--primary-blue);
+		           padding: 0.4rem 1rem;
+		           border-radius: 15px;
+		           font-size: 0.75rem;
+		           font-weight: 600;
+		           margin-bottom: 1rem;
+		       }
+
+		       .event-title {
+		           font-size: 1.25rem;
+		           font-weight: 600;
+		           color: var(--text-primary);
+		           margin-bottom: 1rem;
+		           line-height: 1.4;
+		       }
+
+		       .event-description {
+		           color: var(--text-secondary);
+		           font-size: 0.95rem;
+		           line-height: 1.6;
+		           margin-bottom: 1.5rem;
+		       }
+
+		       .event-meta {
+		           display: flex;
+		           align-items: center;
+		           gap: 1rem;
+		           margin-bottom: 1.5rem;
+		           flex-wrap: wrap;
+		       }
+
+		       .event-meta-item {
+		           display: flex;
+		           align-items: center;
+		           gap: 0.5rem;
+		           color: var(--text-secondary);
+		           font-size: 0.875rem;
+		       }
+
+		       .event-meta-item i {
+		           color: var(--primary-blue);
+		       }
+
+		       .event-actions {
+		           display: flex;
+		           gap: 1rem;
+		       }
+
+		       .btn-event {
+		           flex: 1;
+		           padding: 0.75rem 1.5rem;
+		           border-radius: 10px;
+		           font-weight: 600;
+		           font-size: 0.875rem;
+		           transition: all 0.3s ease;
+		           text-align: center;
+		           text-decoration: none;
+		       }
+
+		       .btn-register {
+		           background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+		           color: white;
+		           border: none;
+		       }
+
+		       .btn-register:hover {
+		           transform: translateY(-2px);
+		           box-shadow: 0 8px 25px rgba(0, 85, 164, 0.3);
+		       }
+
+		       .btn-details {
+		           background: transparent;
+		           color: var(--primary-blue);
+		           border: 2px solid var(--primary-blue);
+		       }
+
+		       .btn-details:hover {
+		           background: var(--primary-blue);
+		           color: white;
+		           transform: translateY(-2px);
+		       }
+
+		       .events-cta {
+		           text-align: center;
+		           margin-top: 4rem;
+		           padding-top: 3rem;
+		           border-top: 1px solid rgba(0, 0, 0, 0.1);
+		       }
+
+		       /* Event Status Badges */
+		       .event-status {
+		           position: absolute;
+		           top: 1.5rem;
+		           right: 1.5rem;
+		           background: var(--accent-green);
+		           color: white;
+		           padding: 0.4rem 1rem;
+		           border-radius: 15px;
+		           font-size: 0.75rem;
+		           font-weight: 600;
+		           z-index: 1;
+		       }
+
+		       .event-status.upcoming {
+		           background: var(--accent-green);
+		       }
+
+		       .event-status.ongoing {
+		           background: var(--accent-orange);
+		       }
+
+		       .event-status.soon {
+		           background: #8B5CF6;
+		       }
+
+		       /* View All Events Button */
+		       .btn-view-all {
+		           background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+		           color: white;
+		           padding: 1rem 2.5rem;
+		           border-radius: 12px;
+		           font-weight: 600;
+		           text-decoration: none;
+		           display: inline-flex;
+		           align-items: center;
+		           gap: 0.75rem;
+		           transition: all 0.3s ease;
+		       }
+
+		       .btn-view-all:hover {
+		           transform: translateY(-3px);
+		           box-shadow: 0 15px 35px rgba(0, 85, 164, 0.4);
+		           color: white;
+		       }
+
+		       /* Responsive Design */
+		       @media (max-width: 768px) {
+		           .events-grid {
+		               grid-template-columns: 1fr;
+		               gap: 1.5rem;
+		           }
+		           
+		           .event-content {
+		               padding: 1.5rem;
+		           }
+		           
+		           .event-actions {
+		               flex-direction: column;
+		           }
+		       }
+
+		       /* Animation for event cards */
+		       @keyframes slideInUp {
+		           from {
+		               opacity: 0;
+		               transform: translateY(30px);
+		           }
+		           to {
+		               opacity: 1;
+		               transform: translateY(0);
+		           }
+		       }
+
+		       .event-card {
+		           animation: slideInUp 0.6s ease-out;
+		       }
+
+		       .event-card:nth-child(1) { animation-delay: 0.1s; }
+		       .event-card:nth-child(2) { animation-delay: 0.2s; }
+		       .event-card:nth-child(3) { animation-delay: 0.3s; }
+		       .event-card:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Enterprise Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light enterprise-navbar fixed-top">
+        <div class="container">
+            <a class="navbar-brand nav-brand" th:href="@{/home}">
+                <i class="fas fa-rocket"></i>
+                myXclub
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-enterprise active" th:href="@{/home}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-enterprise" th:href="@{/dashboard}">Book Exchange</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-enterprise" href="#">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-enterprise" href="#">Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-enterprise" href="#">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-enterprise" href="#" >
+                            <i class="fas fa-sign-in-alt me-1"></i> Member Access
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="enterprise-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 fade-in-up">
+                    <h1 class="hero-title">MetroLinx Enterprise Portal</h1>
+                    <p class="hero-subtitle">
+						The central hub for MetroLinx team collaboration, knowledge sharing, and corporate initiatives. 
+						Foster connections and drive organizational success through unified engagement.
+                    </p>
+                    <div class="hero-actions">
+                        <a th:href="@{/dashboard}" class="btn btn-primary-enterprise btn-lg">
+                            <i class="fas fa-book-open me-2"></i> Access Book Exchange
+                        </a>
+                        <a href="#" class="btn btn-outline-light btn-outline-light-enterprise btn-lg">
+                            <i class="fas fa-calendar me-2"></i> View Events
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 fade-in-up" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 3rem; backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);">
+                            <i class="fas fa-users fa-5x mb-4" style="opacity: 0.9;"></i>
+                            <h4 style="color: white; margin-bottom: 1rem;">Collaboration Hub</h4>
+                            <p style="color: rgba(255, 255, 255, 0.8); margin: 0;">
+                                Enterprise-grade platform for seamless team interaction and knowledge exchange
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title fade-in-up">Platform Capabilities</h2>
+            <p class="section-subtitle fade-in-up">
+                Designed to enhance collaboration and drive organizational excellence
+            </p>
+            
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card-enterprise fade-in-up">
+                        <div class="feature-icon-enterprise">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="feature-title-enterprise">Knowledge Exchange</h3>
+                        <p class="feature-description-enterprise">
+                            Share and discover books, resources, and expertise across the organization. 
+                            Foster continuous learning and professional development.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card-enterprise fade-in-up" style="animation-delay: 0.1s;">
+                        <div class="feature-icon-enterprise">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3 class="feature-title-enterprise">Event Management</h3>
+                        <p class="feature-description-enterprise">
+                            Discover, register, and manage team events, workshops, and professional 
+                            development sessions in one centralized platform.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card-enterprise fade-in-up" style="animation-delay: 0.2s;">
+                        <div class="feature-icon-enterprise">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <h3 class="feature-title-enterprise">Team Achievements</h3>
+                        <p class="feature-description-enterprise">
+                            Celebrate team successes, track milestones, and recognize outstanding 
+                            contributions across the organization.
+                        </p>
+                    </div>
+                </div>
+                
+
+				<div class="col-lg-4 col-md-6">
+				    <div class="feature-card-enterprise fade-in-up" style="animation-delay: 0.3s;">
+				        <div class="feature-icon-enterprise">
+				            <i class="fas fa-hand-holding-heart"></i>
+				        </div>
+				        <h3 class="feature-title-enterprise">Charity Initiatives</h3>
+				        <p class="feature-description-enterprise">
+				            Participate in company-wide charity drives, donation campaigns, 
+				            and community service initiatives that make a positive impact.
+				        </p>
+				    </div>
+				</div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card-enterprise fade-in-up" style="animation-delay: 0.4s;">
+                        <div class="feature-icon-enterprise">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="feature-title-enterprise">Resource Center</h3>
+                        <p class="feature-description-enterprise">
+                            Access curated learning materials, best practices, and organizational 
+                            resources to support your professional journey.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card-enterprise fade-in-up" style="animation-delay: 0.5s;">
+                        <div class="feature-icon-enterprise">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="feature-title-enterprise">Enterprise Security</h3>
+                        <p class="feature-description-enterprise">
+                            Built with enterprise-grade security protocols to ensure your data 
+                            and interactions remain protected and confidential.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACHIEVEMENTS SECTION - ADD THIS ENTIRE SECTION -->
+    <section class="achievements-section">
+        <div class="container">
+            <h2 class="section-title fade-in-up">Team Achievements</h2>
+            <p class="section-subtitle fade-in-up">
+                Celebrating excellence and innovation across MetroLinx teams
+            </p>
+            
+            <div class="achievement-carousel">
+                <!-- Achievement 1 -->
+                <div class="achievement-slide active">
+                    <div class="achievement-content">
+                        <div class="achievement-image" 
+                             style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');">
+                        </div>
+                        <div class="achievement-text">
+                            <span class="achievement-badge">Innovation Award 2024</span>
+                            <h3 class="achievement-title">Digital Transformation Initiative</h3>
+                            <p class="achievement-description">
+                                Successfully implemented AI-powered workflow automation across 5 departments, 
+                                resulting in 40% efficiency improvement and $2M annual cost savings.
+                            </p>
+                            <div class="achievement-team">
+                                <div class="team-avatar">DT</div>
+                                <div class="team-info">
+                                    <h6>Digital Transformation Team</h6>
+                                    <p>Technology & Innovation Division</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 2 -->
+                <div class="achievement-slide">
+                    <div class="achievement-content">
+                        <div class="achievement-image" 
+                             style="background-image: url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');">
+                        </div>
+                        <div class="achievement-text">
+                            <span class="achievement-badge">Sustainability Excellence</span>
+                            <h3 class="achievement-title">Green Operations Initiative</h3>
+                            <p class="achievement-description">
+                                Reduced carbon footprint by 35% through implementation of eco-friendly practices 
+                                and renewable energy solutions across all operational facilities.
+                            </p>
+                            <div class="achievement-team">
+                                <div class="team-avatar">GO</div>
+                                <div class="team-info">
+                                    <h6>Green Operations Team</h6>
+                                    <p>Environmental Sustainability Division</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 3 -->
+                <div class="achievement-slide">
+                    <div class="achievement-content">
+                        <div class="achievement-image" 
+                             style="background-image: url('https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');">
+                        </div>
+                        <div class="achievement-text">
+                            <span class="achievement-badge">Customer Excellence</span>
+                            <h3 class="achievement-title">Service Innovation Program</h3>
+                            <p class="achievement-description">
+                                Achieved 98% customer satisfaction rating through innovative service delivery 
+                                models and digital customer engagement platforms serving over 1M customers.
+                            </p>
+                            <div class="achievement-team">
+                                <div class="team-avatar">CS</div>
+                                <div class="team-info">
+                                    <h6>Customer Success Team</h6>
+                                    <p>Service Excellence Division</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 4 -->
+                <div class="achievement-slide">
+                    <div class="achievement-content">
+                        <div class="achievement-image" 
+                             style="background-image: url('https://images.unsplash.com/photo-1565688534245-05d6b5be184a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');">
+                        </div>
+                        <div class="achievement-text">
+                            <span class="achievement-badge">Operational Excellence</span>
+                            <h3 class="achievement-title">Infrastructure Modernization</h3>
+                            <p class="achievement-description">
+                                Completed $50M infrastructure upgrade project 3 months ahead of schedule, 
+                                enhancing system reliability and capacity by 200% for future growth.
+                            </p>
+                            <div class="achievement-team">
+                                <div class="team-avatar">IM</div>
+                                <div class="team-info">
+                                    <h6>Infrastructure Modernization Team</h6>
+                                    <p>Operations & Infrastructure Division</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <div class="carousel-controls">
+                <div class="carousel-btn prev-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="carousel-btn next-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <!-- Carousel Dots -->
+            <div class="carousel-dots">
+                <div class="carousel-dot active" data-slide="0"></div>
+                <div class="carousel-dot" data-slide="1"></div>
+                <div class="carousel-dot" data-slide="2"></div>
+                <div class="carousel-dot" data-slide="3"></div>
+            </div>
+        </div>
+    </section>
+
+	<!-- Upcoming Events Section -->
+	    <section class="events-section">
+	        <div class="container">
+	            <h2 class="section-title fade-in-up">Upcoming Events</h2>
+	            <p class="section-subtitle fade-in-up">
+	                Join our upcoming workshops, seminars, and team-building activities
+	            </p>
+	            
+	            <div class="events-grid">
+	                <!-- Featured Event -->
+	                <div class="event-card featured">
+	                    <div class="event-image" 
+	                         style="background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');">
+	                        <div class="event-date">
+	                            <div class="event-day">15</div>
+	                            <div class="event-month">DEC</div>
+	                        </div>
+	                        <div class="event-status upcoming">Featured</div>
+	                    </div>
+	                    <div class="event-content">
+	                        <span class="event-category">Leadership Summit</span>
+	                        <h3 class="event-title">Annual Leadership & Innovation Conference 2024</h3>
+	                        <p class="event-description">
+	                            Join industry leaders and innovators for a day of inspiring talks, 
+	                            networking opportunities, and strategic planning sessions.
+	                        </p>
+	                        <div class="event-meta">
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-clock"></i>
+	                                <span>9:00 AM - 5:00 PM</span>
+	                            </div>
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-map-marker-alt"></i>
+	                                <span>MetroLinx HQ Auditorium</span>
+	                            </div>
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-users"></i>
+	                                <span>150+ Attendees</span>
+	                            </div>
+	                        </div>
+	                        <div class="event-actions">
+	                            <a href="#" class="btn-event btn-register">Register Now</a>
+	                            <a href="#" class="btn-event btn-details">View Details</a>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <!-- Event 2 -->
+	                <div class="event-card">
+	                    <div class="event-image" 
+	                         style="background-image: url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');">
+	                        <div class="event-date">
+	                            <div class="event-day">08</div>
+	                            <div class="event-month">DEC</div>
+	                        </div>
+	                        <div class="event-status soon">Filling Fast</div>
+	                    </div>
+	                    <div class="event-content">
+	                        <span class="event-category">Technical Workshop</span>
+	                        <h3 class="event-title">AI & Machine Learning Masterclass</h3>
+	                        <p class="event-description">
+	                            Hands-on workshop covering advanced AI techniques and practical 
+	                            applications for business optimization and innovation.
+	                        </p>
+	                        <div class="event-meta">
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-clock"></i>
+	                                <span>1:00 PM - 4:00 PM</span>
+	                            </div>
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-map-marker-alt"></i>
+	                                <span>Tech Innovation Lab</span>
+	                            </div>
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-users"></i>
+	                                <span>40 Seats</span>
+	                            </div>
+	                        </div>
+	                        <div class="event-actions">
+	                            <a href="#" class="btn-event btn-register">Register Now</a>
+	                            <a href="#" class="btn-event btn-details">View Details</a>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <!-- Event 3 -->
+	                <div class="event-card">
+	                    <div class="event-image" 
+	                         style="background-image: url('https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');">
+	                        <div class="event-date">
+	                            <div class="event-day">12</div>
+	                            <div class="event-month">DEC</div>
+	                        </div>
+	                        <div class="event-status upcoming">New</div>
+	                    </div>
+	                    <div class="event-content">
+	                        <span class="event-category">Team Building</span>
+	                        <h3 class="event-title">Q4 Team Innovation Challenge</h3>
+	                        <p class="event-description">
+	                            Collaborative problem-solving session where cross-functional teams 
+	                            compete to develop innovative solutions for current business challenges.
+	                        </p>
+	                        <div class="event-meta">
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-clock"></i>
+	                                <span>10:00 AM - 3:00 PM</span>
+	                            </div>
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-map-marker-alt"></i>
+	                                <span>Collaboration Center</span>
+	                            </div>
+	                            <div class="event-meta-item">
+	                                <i class="fas fa-users"></i>
+	                                <span>12 Teams</span>
+	                            </div>
+	                        </div>
+	                        <div class="event-actions">
+	                            <a href="#" class="btn-event btn-register">Register Team</a>
+	                            <a href="#" class="btn-event btn-details">View Details</a>
+	                        </div>
+	                    </div>
+	                </div>
+
+	               
+
+	            <!-- View All Events CTA -->
+	            <div class="events-cta fade-in-up">
+	                <a href="#" class="btn-view-all">
+	                    <i class="fas fa-calendar-alt"></i>
+	                    View All Events Calendar
+	                </a>
+	            </div>
+	        </div>
+	    </section>
+
+    <!-- Footer -->
+    <footer class="enterprise-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="footer-brand">MetroLinx Portal</div>
+                    <p style="color: rgba(255, 255, 255, 0.7);">
+                        Empowering collaboration and innovation across the MetroLinx organization.
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 style="color: white; margin-bottom: 1rem;">Platform</h6>
+                    <ul class="footer-links">
+                        <li><a th:href="@{/home}">Home</a></li>
+                        <li><a th:href="@{/dashboard}">Book Exchange</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Resources</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 style="color: white; margin-bottom: 1rem;">Support</h6>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h6 style="color: white; margin-bottom: 1rem;">Company</h6>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Terms</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 mb-4">
+                    <h6 style="color: white; margin-bottom: 1rem;">Connect</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" style="color: rgba(255, 255, 255, 0.7);"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" style="color: rgba(255, 255, 255, 0.7);"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" style="color: rgba(255, 255, 255, 0.7);"><i class="fab fa-youtube fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center pt-4" style="border-top: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.5);">
+                <p class="mb-0">&copy; 2025 MetroLinx Enterprise Portal. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ACHIEVEMENTS CAROUSEL JAVASCRIPT
+        class AchievementCarousel {
+            constructor() {
+                this.slides = document.querySelectorAll('.achievement-slide');
+                this.dots = document.querySelectorAll('.carousel-dot');
+                this.prevBtn = document.querySelector('.prev-btn');
+                this.nextBtn = document.querySelector('.next-btn');
+                this.currentSlide = 0;
+                this.autoSlideInterval = null;
+                
+                this.init();
+            }
+            
+            init() {
+                this.prevBtn.addEventListener('click', () => this.prevSlide());
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+                
+                this.dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => this.goToSlide(index));
+                });
+                
+                this.startAutoSlide();
+                
+                // Pause auto-slide on hover
+                const carousel = document.querySelector('.achievement-carousel');
+                carousel.addEventListener('mouseenter', () => this.stopAutoSlide());
+                carousel.addEventListener('mouseleave', () => this.startAutoSlide());
+            }
+            
+            showSlide(index) {
+                // Hide all slides
+                this.slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+                
+                // Remove active class from all dots
+                this.dots.forEach(dot => {
+                    dot.classList.remove('active');
+                });
+                
+                // Show current slide and dot
+                this.slides[index].classList.add('active');
+                this.dots[index].classList.add('active');
+                
+                this.currentSlide = index;
+            }
+            
+            nextSlide() {
+                const nextIndex = (this.currentSlide + 1) % this.slides.length;
+                this.showSlide(nextIndex);
+            }
+            
+            prevSlide() {
+                const prevIndex = (this.currentSlide - 1 + this.slides.length) % this.slides.length;
+                this.showSlide(prevIndex);
+            }
+            
+            goToSlide(index) {
+                this.showSlide(index);
+            }
+            
+            startAutoSlide() {
+                this.autoSlideInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 5000); // Change slide every 5 seconds
+            }
+            
+            stopAutoSlide() {
+                if (this.autoSlideInterval) {
+                    clearInterval(this.autoSlideInterval);
+                    this.autoSlideInterval = null;
+                }
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize achievements carousel
+            new AchievementCarousel();
+            
+            // Your existing animation code
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-in-up');
+            fadeElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.enterprise-navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+		
+		 document.addEventListener('DOMContentLoaded', function() {
+		            // Your existing animation code
+		            const observerOptions = {
+		                threshold: 0.1,
+		                rootMargin: '0px 0px -50px 0px'
+		            };
+
+		            const observer = new IntersectionObserver((entries) => {
+		                entries.forEach(entry => {
+		                    if (entry.isIntersecting) {
+		                        entry.target.style.opacity = '1';
+		                        entry.target.style.transform = 'translateY(0)';
+		                    }
+		                });
+		            }, observerOptions);
+
+		            const fadeElements = document.querySelectorAll('.fade-in-up');
+		            fadeElements.forEach(el => {
+		                el.style.opacity = '0';
+		                el.style.transform = 'translateY(30px)';
+		                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+		                observer.observe(el);
+		            });
+
+		            // Navbar scroll effect
+		            window.addEventListener('scroll', function() {
+		                const navbar = document.querySelector('.enterprise-navbar');
+		                if (window.scrollY > 50) {
+		                    navbar.classList.add('scrolled');
+		                } else {
+		                    navbar.classList.remove('scrolled');
+		                }
+		            });
+
+		            // Event card hover effects
+		            const eventCards = document.querySelectorAll('.event-card');
+		            eventCards.forEach(card => {
+		                card.addEventListener('mouseenter', function() {
+		                    this.style.zIndex = '10';
+		                });
+		                
+		                card.addEventListener('mouseleave', function() {
+		                    this.style.zIndex = '1';
+		                });
+		            });
+		        });
+    </script>
+</body>
+</html>

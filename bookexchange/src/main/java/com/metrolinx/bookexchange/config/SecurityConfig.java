@@ -35,7 +35,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/dashboard", true)
+                .defaultSuccessUrl("/home", true) //changed from dashboard to home 
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
